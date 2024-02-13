@@ -2,11 +2,11 @@ name : Train
 on : workflow_dispatch
 
 jobs:
-  build:
+  train-model:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
 
     - name: Pull Docker Image
       run: docker pull buraktag/mlops_case_study:latest
@@ -17,4 +17,3 @@ jobs:
         -v ${{ github.workspace }}:/workspace \
         buraktag/mlops_case_study:latest \
         /bin/bash -c "cd /workspace && python train.py"
-
