@@ -8,11 +8,10 @@ jobs:
     runs-on: self-hosted
     container:
       image: buraktag/mlops_case_study:latest
-      options: --ipc=host --gpus all
+      options: --user root --ipc=host --gpus all
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      with:
-        path: '/workspace'
+
     - name: Run train.py within Docker container
       run: cd /workspace && python train.py
