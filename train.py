@@ -10,7 +10,7 @@ results = model.train(
     data="coco128.yaml",
     epochs=100,
     imgsz=640,
-    project="myproject",
-    name="mlops_train",
-    device="cpu",
+    project="mlops",
+    name="IE-1001",
+    device="cuda",
 )
