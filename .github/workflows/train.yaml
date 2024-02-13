@@ -4,18 +4,17 @@ on : workflow_dispatch
 jobs:
   train-model:
     runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
 
-  steps:
-  - name: Checkout
-    uses: actions/checkout@v2
+    - name: Pull Docker Image
+      run: docker pull buraktag/mlops_case_study:latest
 
-  - name: Pull Docker Image
-    run: docker pull buraktag/mlops_case_study:latest
-
-  - name: Run train.py within Docker container
-    run: |
-      docker run --name training-container \
-      -v ${{ github.workspace }}:/workspace \
-      buraktag/mlops_case_study:latest \
-      /bin/bash -c "cd /workspace && python train.py"
+    - name: Run train.py within Docker container
+      run: |
+        docker run --name training-container \
+        -v ${{ github.workspace }}:/workspace \
+        buraktag/mlops_case_study:latest \
+        /bin/bash -c "cd /workspace && python train.py"
 
