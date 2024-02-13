@@ -1,4 +1,4 @@
-name : Run Tests
+name : Train
 on : workflow_dispatch
 
 jobs:
