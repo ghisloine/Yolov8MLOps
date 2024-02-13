@@ -1,5 +1,5 @@
 name : Run Tests
-on : workflows-dispatch
+on : workflow-dispatch
 
 jobs:
   build:
