@@ -12,10 +12,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Look around
-      run: ls -l
-    - name: Check where we are
-      run: pwd
-
+    - name: Look train.py code
+      run: cat train.py
     - name: Run train.py within Docker container
-      run: cd /workspace && python train.py
+      run: python train.py
