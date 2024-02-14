@@ -12,11 +12,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Look train.py code
-      run: cat train.py
-    - name: Run train.py within Docker container
+
+    - name: Train within Docker container
       run: python train.py
-    - name: Look at the model file
-      run: ls -l
-    - name: Look at the weights file
-      run: ls mlops/IE-1001/weights
+
+    - name: Copy Best Model
+      run: cp mlops/IE-1001/weights/best.pth mymodels/best.pth

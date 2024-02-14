@@ -1,0 +1,4 @@
+[core]
+    remote = remotefiles
+['remote "remotefiles"']
+    url = gs://intenseye-mlops
