@@ -20,7 +20,7 @@ jobs:
       run: python train.py
 
     - name: Copy Best Model
-      run: cp mlops/IE-1001/weights/best.pth mymodels/best.pth
+      run: cp mlops/IE-1001/weights/best.pt mymodels/best.pt
 
     - name: Send Best Model to DVC
       run: dvc add mymodels/best.pth && dvc push
