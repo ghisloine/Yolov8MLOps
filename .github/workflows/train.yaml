@@ -28,8 +28,8 @@ jobs:
     - name: Copy Best Model
       run: mkdir mymodels && cp mlops/IE-1001/weights/best.pt mymodels/best.pt
 
-    - name: Check Around
-      run: ls -l mymodels && pwd
-
     - name: Send Best Model to DVC
-      run: dvc add mymodels/best.pt && dvc push
+      run: |
+        dvc add mymodels/best.pt -v
+        git add mymodels/best.pt.dvc mymodels/.gitignore
+        dvc push
