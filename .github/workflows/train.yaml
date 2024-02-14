@@ -32,7 +32,10 @@ jobs:
       run: dvc add mymodels/best.pt
 
     - name: Git Add Model
-      run: git add mymodels/best.pt.dvc mymodels/.gitignore && git commit -m "DVC best model added."
+      run: |
+        git config --global --add safe.directory '*'
+        git add mymodels/best.pt.dvc mymodels/.gitignore
+        git commit -m "DVC best model added."
 
     - name: Push to DVC
       run: dvc push
