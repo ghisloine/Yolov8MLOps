@@ -22,6 +22,11 @@ jobs:
       with:
         credentials_json: '${{ secrets.GCLOUD }}'
 
+    - name: Authenticate to Github
+      run: |
+        git config --global user.email "burak.tagtekin@icloud.com"
+        git config --global user.name "ghisloine"
+
     - name: Train within Docker container
       run: python train.py
 
