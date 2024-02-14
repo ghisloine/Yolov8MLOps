@@ -44,3 +44,12 @@ jobs:
 
       - name: Push to DVC
         run: dvc push
+
+      - name: Run Evaluate
+        run: python val.py
+
+      - name: Send Evaluation Results to DVC
+        run: dvc add myresults/metrics.json
+
+      - name: Push to DVC
+        run: dvc push
