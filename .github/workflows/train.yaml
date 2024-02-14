@@ -26,4 +26,4 @@ jobs:
       run: ls -l mymodels && pwd
 
     - name: Send Best Model to DVC
-      run: dvc add mymodels/best.pth && dvc push
+      run: dvc add mymodels/best.pt && dvc push
