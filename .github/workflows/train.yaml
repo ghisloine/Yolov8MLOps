@@ -31,7 +31,8 @@ jobs:
 
     - name: Send Best Model to DVC
       run: |
-        dvc add mymodels/best.pt 
+        dvc add mymodels/best.pt
+        git config --global safe.directory '*'
         git add mymodels/best.pt.dvc mymodels/.gitignore
         git commit -m "Add best model"
         dvc push
