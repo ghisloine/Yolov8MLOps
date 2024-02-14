@@ -11,7 +11,7 @@ jobs:
       options: --ipc=host --gpus all
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup DVC
       run: pip install dvc[gs]
@@ -32,7 +32,6 @@ jobs:
     - name: Send Best Model to DVC
       run: |
         dvc add mymodels/best.pt
-        git config --global safe.directory '*'
         git add mymodels/best.pt.dvc mymodels/.gitignore
         git commit -m "Add best model"
         dvc push
