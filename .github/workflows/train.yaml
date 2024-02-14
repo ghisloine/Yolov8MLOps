@@ -30,6 +30,6 @@ jobs:
 
     - name: Send Best Model to DVC
       run: |
-        dvc add mymodels/best.pt -v
-        git add mymodels/best.pt.dvc mymodels/.gitignore
+        dvc add mymodels/best.pt 
+        git add mymodels/best.pt.dvc mymodels/.gitignore 
         dvc push
