@@ -40,6 +40,7 @@ jobs:
         git config --global user.name "ghisloine"
         git add mymodels/best.pt.dvc mymodels/.gitignore
         git commit -m "DVC best model added."
+        git push
 
     - name: Push to DVC
       run: dvc push
