@@ -36,6 +36,8 @@ jobs:
 
     - name: Commit Best Model
       run: |
+        git config --global user.email "burak.tagtekin@icloud.com"
+        git config --global user.name "ghisloine"
         git add mymodels/best.pt.dvc mymodels/.gitignore
         git commit -m "DVC best model added."
 
