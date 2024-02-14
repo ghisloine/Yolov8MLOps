@@ -2,4 +2,3 @@
     remote = remotefiles
 ['remote "remotefiles"']
     url = gs://intenseye-mlops
-    version_aware = true
