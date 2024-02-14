@@ -13,10 +13,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Set Git Identity
-      run: |
-        git config user.name 'github-actions[bot]'
-        git config user.email 'github-actions[bot]@users.noreply.github.com'
+    - name: Check where is repository
+      run: ls -l
 
     - name: Setup DVC
       run: pip install dvc[gs]
