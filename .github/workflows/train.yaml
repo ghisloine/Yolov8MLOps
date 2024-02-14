@@ -31,8 +31,8 @@ jobs:
     - name: Send Best Model to DVC
       run: dvc add mymodels/best.pt
 
-    - name: Change Directory Status
-      run: git config --global --add safe.directory '*'
+    - name: Check Git Status
+      run: git status
 
     - name: Autocommit DVC
       uses: stefanzweifel/git-auto-commit-action@v5
