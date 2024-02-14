@@ -31,9 +31,11 @@ jobs:
     - name: Send Best Model to DVC
       run: dvc add mymodels/best.pt
 
-    - name: Git Add Model
+    - name: Change Directory Status
+      run: git config --global --add safe.directory '*'
+
+    - name: Commit Best Model
       run: |
-        git config --global --add safe.directory '*'
         git add mymodels/best.pt.dvc mymodels/.gitignore
         git commit -m "DVC best model added."
 
