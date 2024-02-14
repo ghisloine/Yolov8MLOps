@@ -13,9 +13,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Check where is repository
-      run: ls -a && pwd
-
     - name: Setup DVC
       run: pip install dvc[gs]
 
@@ -31,10 +28,13 @@ jobs:
     - name: Copy Best Model
       run: mkdir mymodels && cp mlops/IE-1001/weights/best.pt mymodels/best.pt
 
-
     - name: Send Best Model to DVC
-      run: |
-        dvc add mymodels/best.pt
-        git add mymodels/best.pt.dvc mymodels/.gitignore
-        git commit -m "Add best model"
-        dvc push
+      run: dvc add mymodels/best.pt
+
+    - name: Autocommit DVC
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "DVC: Auto-commit model files"
+
+    - name: Push to DVC
+      run: dvc push
