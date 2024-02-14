@@ -14,7 +14,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Setup DVC
-      run: pip install dvc
+      run: pip install dvc[gs]
 
     - name: Train within Docker container
       run: python train.py
