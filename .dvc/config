@@ -2,3 +2,4 @@
     remote = remotefiles
 ['remote "remotefiles"']
     url = gs://intenseye-mlops
+    gdrive_use_service_account = true

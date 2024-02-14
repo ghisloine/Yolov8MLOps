@@ -16,6 +16,12 @@ jobs:
     - name: Setup DVC
       run: pip install dvc[gs]
 
+    - name: Authenticate to Google Cloud
+      id: auth
+      uses: google-github-actions/auth@v0
+      with:
+        credentials_json: '${{ secrets.GCLOUD }}'
+
     - name: Train within Docker container
       run: python train.py
 
