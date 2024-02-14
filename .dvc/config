@@ -1,6 +1,5 @@
 [core]
     remote = remotefiles
-    autostage = true
 ['remote "remotefiles"']
     url = gs://intenseye-mlops
     version_aware = true
