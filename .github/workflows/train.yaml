@@ -13,8 +13,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Setup DVC
+      uses: iterative/setup-dvc@v1
+
     - name: Train within Docker container
       run: python train.py
 
     - name: Copy Best Model
       run: cp mlops/IE-1001/weights/best.pth mymodels/best.pth
+
+    - name: Send Best Model to DVC
+      run: dvc add mymodels/best.pth && dvc push
