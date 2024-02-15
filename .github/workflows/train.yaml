@@ -34,28 +34,18 @@ jobs:
       - name: Change Directory Status
         run: git config --global --add safe.directory '*'
 
-      - name: Commit and Push Changes Model to DVC
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: 'Update model best.pt'
-          file_pattern: mymodels/best.pt.dvc mymodels/.gitignore
-          branch: ${{ github.head_ref }} # or specify your branch directly, e.g., 'main'
-
-      - name: Push to DVC
-        run: dvc push
-
       - name: Run Evaluate
         run: python val.py
+
+      - name: Send Evaluation Results to DVC
+        run: dvc add myresults/metrics.json
 
       - name: Commit and Push Changes Evaluation to DVC
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: 'Update Evaluation Results'
-          file_pattern: myresults/metrics.json.dvc myresults/.gitignore
+          commit_message: 'Update Model & Evaluation Results'
+          file_pattern: myresults/metrics.json.dvc myresults/.gitignore mymodels/best.pt.dvc mymodels/.gitignore
           branch: ${{ github.head_ref }} # or specify your branch directly, e.g., 'main'
-
-      - name: Send Evaluation Results to DVC
-        run: dvc add myresults/metrics.json
 
       - name: Push to DVC
         run: dvc push
