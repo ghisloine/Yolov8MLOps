@@ -17,7 +17,7 @@ print(metrics.box.map75)  # map75
 print(metrics.box.maps)  # a list contains map50-95 of each category
 
 
-with open("myresults/metrics.json", "w") as fp:
+with open("myresults/metrics.json", "a") as fp:
     data = {
         "map": metrics.box.map,
         "map50": metrics.box.map50,
