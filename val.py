@@ -8,6 +8,7 @@ model = YOLO("yolov8n.pt")  # load an official model
 
 # Validate the model
 metrics = model.val(
+    data="coco128.yaml",
     save_json=True
 )  # no arguments needed, dataset and settings remembered
 print(metrics.box.map)  # map50-95
