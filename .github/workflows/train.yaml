@@ -38,13 +38,18 @@ jobs:
         run: python val.py
 
       - name: Check Differences
-        run: dvc metrics diff --targets myresults/metrics.json >> report.md
+        run: |
+          dvc metrics diff --targets myresults/metrics.json
+          dvc metrics diff --targets myresults/metrics.json >> report.md
+          cat report.md
 
       - uses: iterative/setup-cml@v2
       - name: Write Results
         env:
           REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        run: cml comment create report.md
+        run: |
+          cat report.md
+          cml comment create report.md
 
       - name: Send Evaluation Results to DVC
         run: dvc add myresults/metrics.json
