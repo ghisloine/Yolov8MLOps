@@ -40,6 +40,14 @@ jobs:
       - name: Send Evaluation Results to DVC
         run: dvc add myresults/metrics.json
 
+      - name: Check Differences
+        run: dvc metrics diff --targets myresults/metrics.json >> results.md
+
+      - uses: iterative/setup-cml@v1
+      - name: Write Results
+        run: |
+          cml comment create report.md
+
       - name: Commit and Push Changes Evaluation to DVC
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
