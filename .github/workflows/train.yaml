@@ -41,7 +41,7 @@ jobs:
         run: dvc add myresults/metrics.json
 
       - name: Check Differences
-        run: dvc metrics diff --targets myresults/metrics.json >> results.md
+        run: dvc metrics diff --targets myresults/metrics.json >> report.md
 
       - uses: iterative/setup-cml@v2
       - name: Write Results
