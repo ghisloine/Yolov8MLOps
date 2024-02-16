@@ -31,3 +31,4 @@ with open("myresults/metrics.json", "w+") as fp:
         "map75": metrics.box.map75,
     }
     json.dump(data, fp)
+print("Evaluation Finished ...")
