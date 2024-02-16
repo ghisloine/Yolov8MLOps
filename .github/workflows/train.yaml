@@ -37,9 +37,6 @@ jobs:
       - name: Run Evaluate
         run: python val.py
 
-      - name: Send Evaluation Results to DVC
-        run: dvc add myresults/metrics.json
-
       - name: Check Differences
         run: dvc metrics diff --targets myresults/metrics.json >> report.md
 
@@ -48,6 +45,9 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: cml comment create report.md
+
+      - name: Send Evaluation Results to DVC
+        run: dvc add myresults/metrics.json
 
       - name: Commit and Push Changes Evaluation to DVC
         uses: stefanzweifel/git-auto-commit-action@v4
