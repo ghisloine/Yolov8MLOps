@@ -1,4 +1,4 @@
-name: Train
+name : Train
 on:
   pull_request:
     branches: [ main ]
@@ -10,42 +10,31 @@ jobs:
       image: buraktag/mlops_case_study:latest
       options: --ipc=host --gpus all
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Setup DVC
-        run: pip install dvc[gs]
+    - name: Check where is repository
+      run: ls -l
 
-      - name: Authenticate to Google Cloud
-        id: auth
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: '${{ secrets.GCLOUD }}'
+    - name: Setup DVC
+      run: pip install dvc[gs]
 
-      - name: Train within Docker container
-        run: python train.py
+    - name: Authenticate to Google Cloud
+      id: auth
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: '${{ secrets.GCLOUD }}'
 
-      - name: Copy Best Model
-        run: cp mlops/IE-1001/weights/best.pt mymodels/best.pt
+    - name: Train within Docker container
+      run: python train.py
 
-      - name: Send Best Model to DVC
-        run: dvc add mymodels/best.pt
+    - name: Copy Best Model
+      run: mkdir mymodels && cp mlops/IE-1001/weights/best.pt mymodels/best.pt
 
-      - name: Change Directory Status
-        run: git config --global --add safe.directory '*'
 
-      - name: Run Evaluate
-        run: python val.py
-
-      - name: Send Evaluation Results to DVC
-        run: dvc add myresults/metrics.json
-
-      - name: Commit and Push Changes Evaluation to DVC
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: 'Update Model & Evaluation Results'
-          file_pattern: myresults/metrics.json.dvc myresults/.gitignore mymodels/best.pt.dvc mymodels/.gitignore
-          branch: ${{ github.head_ref }} # or specify your branch directly, e.g., 'main'
-
-      - name: Push to DVC
-        run: dvc push
+    - name: Send Best Model to DVC
+      run: |
+        dvc add mymodels/best.pt
+        git add mymodels/best.pt.dvc mymodels/.gitignore
+        git commit -m "Add best model"
+        dvc push
