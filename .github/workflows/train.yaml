@@ -38,12 +38,11 @@ jobs:
         run: python val.py
 
       - name: Write Differences
-        run: dvc metrics diff --targets myresults/metrics.json
+        run: dvc metrics diff -R --targets myresults/metrics.json  > report.md
 
       - name: Check Differences
         run: |
           cat myresults/metrics.json
-          dvc metrics diff --targets myresults/metrics.json > report.md
           ls
           cat report.md
 
