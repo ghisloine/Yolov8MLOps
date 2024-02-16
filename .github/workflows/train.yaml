@@ -37,6 +37,9 @@ jobs:
       - name: Run Evaluate
         run: python val.py
 
+      - name: Write Differences
+        run: dvc metrics diff --targets myresults/metrics.json
+
       - name: Check Differences
         run: |
           dvc metrics diff --targets myresults/metrics.json
