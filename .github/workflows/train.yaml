@@ -43,7 +43,7 @@ jobs:
       - name: Check Differences
         run: |
           cat myresults/metrics.json
-          dvc metrics diff --targets myresults/metrics.json >> report.md
+          dvc metrics diff --targets myresults/metrics.json > report.md
           ls
           cat report.md
 
