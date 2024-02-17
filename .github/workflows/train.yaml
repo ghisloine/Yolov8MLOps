@@ -40,7 +40,17 @@ jobs:
     container:
       image: buraktag/mlops_case_study:latest
       options: --ipc=host --gpus all
+
     steps:
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCLOUD }}'
+
+      - name: Setup DVC
+        run: pip install dvc[gs]
+
       - name: Run Evaluate
         run: python val.py
 
@@ -70,6 +80,15 @@ jobs:
       image: buraktag/mlops_case_study:latest
       options: --ipc=host --gpus all
     steps:
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCLOUD }}'
+
+      - name: Setup DVC
+        run: pip install dvc[gs]
+
       - name: Convert Model
         run: python convert.py
 
