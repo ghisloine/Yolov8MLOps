@@ -51,6 +51,9 @@ jobs:
       - name: Setup DVC
         run: pip install dvc[gs]
 
+      - name: Pull from DVC
+        run: dvc pull mymodels/best.pt
+
       - name: Change Directory Status
         run: git config --global --add safe.directory '*'
 
@@ -94,6 +97,9 @@ jobs:
 
       - name: Setup DVC
         run: pip install dvc[gs]
+
+      - name: Pull from DVC
+        run: dvc pull mymodels/best.pt
 
       - name: Convert Model
         run: python convert.py
