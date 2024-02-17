@@ -36,6 +36,10 @@ jobs:
 
   evaluate-model:
     needs: train-model
+    runs-on: self-hosted
+    container:
+      image: buraktag/mlops_case_study:latest
+      options: --ipc=host --gpus all
     steps:
       - name: Run Evaluate
         run: python val.py
@@ -61,6 +65,10 @@ jobs:
 
   convert-model:
     needs: [train-model, evaluate-model]
+    runs-on: self-hosted
+    container:
+      image: buraktag/mlops_case_study:latest
+      options: --ipc=host --gpus all
     steps:
       - name: Convert Model
         run: python convert.py
