@@ -11,6 +11,6 @@ results = model.train(
     epochs=10,
     imgsz=736,
     project="mlops",
-    name="IE-1001",
+    name="IE-1002",
     device="cuda",
 )
