@@ -13,14 +13,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup DVC
-        run: pip install dvc[gs]
-
       - name: Authenticate to Google Cloud
         id: auth
         uses: google-github-actions/auth@v2
         with:
           credentials_json: '${{ secrets.GCLOUD }}'
+
+      - name: Setup DVC
+        run: pip install dvc[gs]
 
       - name: Train within Docker container
         run: python train.py
@@ -38,21 +38,13 @@ jobs:
         run: python val.py
 
       - name: Write Differences
-        run: dvc metrics diff -R --targets myresults/metrics.json  > report.md
+        run: dvc metrics diff -R --targets myresults/metrics.json  >> report.md
 
-      - name: Check Differences
-        run: |
-          cat myresults/metrics.json
-          ls
-          cat report.md
-
-      - uses: iterative/setup-cml@v2
       - name: Write Results
+        uses: iterative/setup-cml@v2
         env:
           REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        run: |
-          cat report.md
-          cml comment create report.md
+        run: cml comment create report.md
 
       - name: Send Evaluation Results to DVC
         run: dvc add myresults/metrics.json
