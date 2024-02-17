@@ -31,9 +31,6 @@ jobs:
       - name: Send Best Model to DVC
         run: dvc add mymodels/best.pt
 
-      - name: Change Directory Status
-        run: git config --global --add safe.directory '*'
-
   evaluate-model:
     needs: train-model
     runs-on: self-hosted
@@ -50,6 +47,9 @@ jobs:
 
       - name: Setup DVC
         run: pip install dvc[gs]
+
+      - name: Change Directory Status
+        run: git config --global --add safe.directory '*'
 
       - name: Run Evaluate
         run: python val.py
