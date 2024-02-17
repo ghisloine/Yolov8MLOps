@@ -40,8 +40,8 @@ jobs:
       - name: Write Differences
         run: dvc metrics diff -R --targets myresults/metrics.json  >> report.md
 
-      - name: Write Results
       - uses: iterative/setup-cml@v2
+      - name: Write Results
         env:
           REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: cml comment create report.md
