@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 
 # Load a pretrained YOLOv8n model
-model = YOLO("yolov8n.pt", task="detect")
+model = YOLO("mymodels/best.pt", task="detect")
 # Uncomment to load your best.pt or best.engine model
 # model = YOLO("path/to/best.pt", task="detect")
 

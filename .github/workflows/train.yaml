@@ -1,4 +1,4 @@
-name: Train
+name: Train Model
 on:
   pull_request:
     branches: [ main ]
@@ -34,6 +34,9 @@ jobs:
       - name: Change Directory Status
         run: git config --global --add safe.directory '*'
 
+  evaluate-model:
+    needs: train-model
+    steps:
       - name: Run Evaluate
         run: python val.py
 
@@ -44,7 +47,7 @@ jobs:
       - name: Write Results
         env:
           REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        run: cml comment create report.md
+        run: cml comment update report.md
 
       - name: Send Evaluation Results to DVC
         run: dvc add myresults/metrics.json
@@ -55,6 +58,18 @@ jobs:
           commit_message: 'Update Model & Evaluation Results'
           file_pattern: myresults/metrics.json.dvc myresults/.gitignore mymodels/best.pt.dvc mymodels/.gitignore
           branch: ${{ github.head_ref }} # or specify your branch directly, e.g., 'main'
+
+  convert-model:
+    needs: [train-model, evaluate-model]
+    steps:
+      - name: Convert Model
+        run: python convert.py
+
+      - name: Validate Model with Bus Image
+        run: python predict.py
+
+      - name: Send Evaluation Results to DVC
+        run: dvc add mymodels/best.engine
 
       - name: Push to DVC
         run: dvc push
