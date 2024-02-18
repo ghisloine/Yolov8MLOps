@@ -111,6 +111,9 @@ jobs:
       - name: Setup DVC
         run: pip install dvc[gs]
 
+      - name: Change Directory Status
+        run: git config --global --add safe.directory '*'
+
       - name: Pull from DVC
         run: dvc pull mymodels/best.pt
 
