@@ -31,6 +31,16 @@ jobs:
       - name: Send Best Model to DVC
         run: dvc add mymodels/best.pt
 
+      - name: Commit and Push Changes Evaluation to DVC
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'Update Model Results'
+          file_pattern: mymodels/best.pt.dvc mymodels/.gitignore
+          branch: ${{ github.head_ref }}
+
+      - name: Push to DVC
+        run: dvc push
+
   evaluate-model:
     needs: train-model
     runs-on: self-hosted
@@ -75,9 +85,12 @@ jobs:
       - name: Commit and Push Changes Evaluation to DVC
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: 'Update Model & Evaluation Results'
-          file_pattern: myresults/metrics.json.dvc myresults/.gitignore mymodels/best.pt.dvc mymodels/.gitignore
+          commit_message: 'Update Evaluation Results'
+          file_pattern: myresults/metrics.json.dvc myresults/.gitignore
           branch: ${{ github.head_ref }}
+
+      - name: Push to DVC
+        run: dvc push
 
   convert-model:
     needs: [train-model, evaluate-model]
@@ -102,7 +115,7 @@ jobs:
         run: dvc pull mymodels/best.pt
 
       - name: Convert Model
-        run: python convert.py
+        run: python export.py
 
       - name: Validate Model with Bus Image
         run: python predict.py
