@@ -8,9 +8,9 @@ model = YOLO("yolov8n.yaml").load("yolov8n.pt")  # build from YAML and transfer 
 # Train the model
 results = model.train(
     data="coco128.yaml",
-    epochs=5,
-    imgsz=640,
+    epochs=10,
+    imgsz=736,
     project="mlops",
-    name="IE-1001",
+    name="IE-1002",
     device="cuda",
 )

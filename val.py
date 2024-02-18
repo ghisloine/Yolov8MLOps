@@ -3,7 +3,7 @@ import json
 import os
 
 # Load a model
-model = YOLO("yolov8n.pt")  # load an official model
+model = YOLO("mymodels/best.pt")  # load an official model
 # Uncomment to load your best.pt model
 # model = YOLO("path/to/best.pt")  # load a custom model
 
@@ -31,3 +31,4 @@ with open("myresults/metrics.json", "w+") as fp:
         "map75": metrics.box.map75,
     }
     json.dump(data, fp)
+print("Evaluation Finished ...")

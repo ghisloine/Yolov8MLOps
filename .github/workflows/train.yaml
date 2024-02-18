@@ -1,4 +1,4 @@
-name: Train
+name: Train Model
 on:
   pull_request:
     branches: [ main ]
@@ -13,8 +13,47 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCLOUD }}'
+
       - name: Setup DVC
         run: pip install dvc[gs]
+
+      - name: Change Directory Status
+        run: git config --global --add safe.directory '*'
+
+      - name: Train within Docker container
+        run: python train.py
+
+      - name: Copy Best Model
+        run: cp mlops/${{ github.head_ref }}/weights/best.pt mymodels/best.pt
+
+      - name: Send Best Model to DVC
+        run: dvc add mymodels/best.pt
+
+      - name: Commit and Push Changes Evaluation to DVC
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'Update Model Results'
+          file_pattern: mymodels/best.pt.dvc mymodels/.gitignore
+          branch: ${{ github.head_ref }}
+
+      - name: Push to DVC
+        run: dvc push
+
+  evaluate-model:
+    needs: train-model
+    runs-on: self-hosted
+    container:
+      image: buraktag/mlops_case_study:latest
+      options: --ipc=host --gpus all
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Authenticate to Google Cloud
         id: auth
@@ -22,14 +61,11 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCLOUD }}'
 
-      - name: Train within Docker container
-        run: python train.py
+      - name: Setup DVC
+        run: pip install dvc[gs]
 
-      - name: Copy Best Model
-        run: cp mlops/IE-1001/weights/best.pt mymodels/best.pt
-
-      - name: Send Best Model to DVC
-        run: dvc add mymodels/best.pt
+      - name: Pull from DVC
+        run: dvc pull mymodels/best.pt
 
       - name: Change Directory Status
         run: git config --global --add safe.directory '*'
@@ -37,15 +73,68 @@ jobs:
       - name: Run Evaluate
         run: python val.py
 
+      - name: Write Differences
+        run: dvc metrics diff -R --targets myresults/metrics.json  >> report.md
+
+      - uses: iterative/setup-cml@v2
+      - name: Write Results
+        env:
+          REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: cml comment update report.md
+
       - name: Send Evaluation Results to DVC
         run: dvc add myresults/metrics.json
 
       - name: Commit and Push Changes Evaluation to DVC
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: 'Update Model & Evaluation Results'
-          file_pattern: myresults/metrics.json.dvc myresults/.gitignore mymodels/best.pt.dvc mymodels/.gitignore
-          branch: ${{ github.head_ref }} # or specify your branch directly, e.g., 'main'
+          commit_message: 'Update Evaluation Results'
+          file_pattern: myresults/metrics.json.dvc myresults/.gitignore
+          branch: ${{ github.head_ref }}
+
+      - name: Push to DVC
+        run: dvc push
+
+  convert-model:
+    needs: [train-model, evaluate-model]
+    runs-on: self-hosted
+    container:
+      image: buraktag/mlops_case_study:latest
+      options: --ipc=host --gpus all
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCLOUD }}'
+
+      - name: Setup DVC
+        run: pip install dvc[gs]
+
+      - name: Change Directory Status
+        run: git config --global --add safe.directory '*'
+
+      - name: Pull from DVC
+        run: dvc pull mymodels/best.pt
+
+      - name: Convert Model
+        run: python export.py
+
+      - name: Validate Model with Bus Image
+        run: python predict.py
+
+      - name: Send Evaluation Results to DVC
+        run: dvc add mymodels/best.engine
+
+      - name: Commit and Push Changes Evaluation to DVC
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'Update TensorRT Model'
+          file_pattern: mymodels/.gitignore mymodels/best.engine.dvc
+          branch: ${{ github.head_ref }}
 
       - name: Push to DVC
         run: dvc push
