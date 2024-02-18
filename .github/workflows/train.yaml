@@ -22,6 +22,9 @@ jobs:
       - name: Setup DVC
         run: pip install dvc[gs]
 
+      - name: Change Directory Status
+        run: git config --global --add safe.directory '*'
+
       - name: Train within Docker container
         run: python train.py
 
