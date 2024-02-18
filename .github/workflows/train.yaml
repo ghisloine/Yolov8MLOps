@@ -123,5 +123,12 @@ jobs:
       - name: Send Evaluation Results to DVC
         run: dvc add mymodels/best.engine
 
+      - name: Commit and Push Changes Evaluation to DVC
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'Update TensorRT Model'
+          file_pattern: mymodels/.gitignore mymodels/best.engine.dvc
+          branch: ${{ github.head_ref }}
+
       - name: Push to DVC
         run: dvc push
